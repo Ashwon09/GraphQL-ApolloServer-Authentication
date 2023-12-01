@@ -21,5 +21,5 @@ const PORT = process.env.PORT || 4000;
 connectDB();
 
 server.listen(PORT).then(({ url }) => {
-  console.log("API is running in", url);
+  console.log("Server is running in", url);
 });
