@@ -37,7 +37,7 @@ export async function login(loginDetails: UserLogin) {
       accessToken: generateToken(userDetails.username, userDetails.role),
     };
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 
