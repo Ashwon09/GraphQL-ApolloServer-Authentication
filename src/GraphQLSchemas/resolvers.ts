@@ -12,11 +12,18 @@ const resolvers = {
   },
   Mutation: {
     register: (_: any, args: UserInput) => {
-      console.log(args);
-      return register(args);
+      try {
+        return register(args);
+      } catch (error) {
+        throw error;
+      }
     },
     login: (_: any, args: UserLogin) => {
-      return login(args);
+      try {
+        return login(args);
+      } catch (error) {
+        throw error;
+      }
     },
   },
 };
