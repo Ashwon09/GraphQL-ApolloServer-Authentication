@@ -18,6 +18,17 @@ export async function getAllUsers(): Promise<IUser[]> {
 export async function register(user: UserInput): Promise<IUser> {
   try {
     const { username, email, password } = user.input;
+    const userDetails = await getUserWithUsernameEmail(username, email);
+    if (userDetails) {
+      throw new GraphQLError(
+        `username ${username} or email ${email} already exists`,
+        {
+          extensions: {
+            code: "USER_ALREADY_EXISTS",
+          },
+        }
+      );
+    }
     const newUser = await createUserObject(username, email, password);
     console.log("New user to add:", newUser);
     const addedUser = await newUser.save();
@@ -31,7 +42,14 @@ export async function register(user: UserInput): Promise<IUser> {
 export async function login(loginDetails: UserLogin) {
   try {
     const { username, password } = loginDetails.input;
-    const userDetails = await getUserWithUsername(username);
+    const userDetails = await getUserWithUsernameEmail(username);
+    if (!userDetails) {
+      throw new GraphQLError(`User with ${username} not found`, {
+        extensions: {
+          code: "USER_NOT_FOUND",
+        },
+      });
+    }
     await verifyPassword(userDetails.password, password);
     return {
       accessToken: generateToken(userDetails.username, userDetails.role),
@@ -39,10 +57,6 @@ export async function login(loginDetails: UserLogin) {
   } catch (error) {
     throw error;
   }
-}
-
-export async function userDetails(username: string) {
-  return await getUserWithUsername(username);
 }
 
 async function hashPassword(password: string): Promise<string> {
@@ -84,14 +98,10 @@ async function createUserObject(
   });
 }
 
-async function getUserWithUsername(username: string) {
-  const userDetails = await User.findOne({ username });
-  if (!userDetails) {
-    throw new GraphQLError(`User with ${username} not found`, {
-      extensions: {
-        code: "USER_NOT_FOUND",
-      },
-    });
-  }
+async function getUserWithUsernameEmail(username?: string, email?: string) {
+  const userDetails = await User.findOne({
+    $or: [{ username }, { email }],
+  });
+
   return userDetails;
 }
