@@ -15,7 +15,11 @@ const resolvers = {
       return getAllUsers();
     },
     user: (_: any, args: getUser) => {
-      return getUserByID(args.id);
+      try {
+        return getUserByID(args.id);
+      } catch (error) {
+        throw error;
+      }
     },
   },
   Mutation: {

@@ -29,12 +29,11 @@ const typeDefs = gql`
     username: String!
     password: String!
   }
+
   type Mutation {
     register(input: UserCreateInput!): User!
     login(input: Login!): Token!
   }
 `;
-
-//   user(id: ID!): User
 
 export default typeDefs;
