@@ -16,6 +16,7 @@ const typeDefs = gql`
   type Query {
     hello: String
     users: [User]!
+    user(id: ID): User
   }
 
   input UserCreateInput {

@@ -6,6 +6,9 @@ export interface UserLogin {
   input: Login;
 }
 
+export interface getUser {
+  id: string;
+}
 interface Login {
   username: string;
   password: string;

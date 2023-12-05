@@ -1,5 +1,10 @@
-import { UserInput, UserLogin } from "../Schemas/userSchemas";
-import { register, getAllUsers, login } from "../Services/userService";
+import { UserInput, UserLogin, getUser } from "../Schemas/userSchemas";
+import {
+  register,
+  getAllUsers,
+  login,
+  getUserByID,
+} from "../Services/userService";
 
 // resolvers.ts
 
@@ -8,6 +13,9 @@ const resolvers = {
     hello: () => "Hello, World!",
     users: () => {
       return getAllUsers();
+    },
+    user: (_: any, args: getUser) => {
+      return getUserByID(args.id);
     },
   },
   Mutation: {

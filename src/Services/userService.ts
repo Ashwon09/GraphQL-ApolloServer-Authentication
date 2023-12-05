@@ -1,7 +1,7 @@
 import { GraphQLError } from "graphql";
 import User, { IUser } from "../Models/User";
 import * as bcrypt from "bcrypt";
-import { UserInput, UserLogin } from "../Schemas/userSchemas";
+import { UserInput, UserLogin, getUser } from "../Schemas/userSchemas";
 import { saltRounds } from "./configs";
 import { generateToken } from "./authorizationService";
 
@@ -15,6 +15,9 @@ export async function getAllUsers(): Promise<IUser[]> {
   }
 }
 
+export async function getUserByID(id: string) {
+  return await User.findById(id);
+}
 export async function register(user: UserInput): Promise<IUser> {
   try {
     const { username, email, password } = user.input;
